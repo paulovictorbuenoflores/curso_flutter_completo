@@ -1,3 +1,5 @@
+import 'dart:io';
+
 void main(List<String> args) {
   {
     //operadores aritmeticos, binarios porque tem duas variaveis operando, a+b, infix
@@ -59,5 +61,18 @@ void main(List<String> args) {
     print(!true);
     //o resultado da operacao abaixo é true, porque a++ só vai ser incrementado depois da operacao == , já --b tem preferencia deve ser decrementado na hora;
     print(a++ == --b);
+  }
+
+  {
+    //Operador ternario
+    print("Esta chovendo ? (s/N)");
+    bool estaChovendo = stdin.readLineSync() == "s";
+
+    print("Está frio ? (s/N)");
+    bool estaFrio = stdin.readLineSync() == "s";
+
+    String resultado =
+        estaChovendo || estaFrio ? "Ficar em casa" : "Sair !"; //ternario
+    print(resultado);
   }
 }
