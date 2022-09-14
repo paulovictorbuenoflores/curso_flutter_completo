@@ -74,5 +74,6 @@ void main(List<String> args) {
     String resultado =
         estaChovendo || estaFrio ? "Ficar em casa" : "Sair !"; //ternario
     print(resultado);
+    print(estaChovendo && estaFrio ? "azarado!" : "sortudo ;{");
   }
 }
