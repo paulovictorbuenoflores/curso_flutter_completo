@@ -1,7 +1,13 @@
 void main(List<String> args) {
   const notas = const [8.2, 7.1, 6.7, 8.9, 4.5, 9.5];
   var boasNotasFn = (double nota) => nota >= 7.5;
+
   print(filtrar(notas, boasNotasFn));
+
+  var nomes = ['ana', 'bia', 'rebeca', 'Victor'];
+  var nomesGrandeFn = (String nome) => nome.length >= 5;
+
+  print(filtrar(nomes, nomesGrandeFn));
 }
 
 //essa funcao que passa como parametro outra funcao que serve para filtrar pode ser usado para filtrar produtos frágeis
