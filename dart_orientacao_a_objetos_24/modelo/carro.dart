@@ -7,8 +7,15 @@ class Carro {
   }
 
   acelerar() {
+    print("aceleraste !\n");
     if (velocidadeAtual < velocidadeMaxima) {
-      velocidadeAtual += 5;
+      for (int i = 0; i < 5; i++) {
+        if (velocidadeAtual < velocidadeMaxima) {
+          velocidadeAtual += 1;
+        }
+        print("| $velocidadeAtual | ");
+      }
+      // print("acelerou!\n$velocidadeAtual");
     } else {
       print("atingiu velocidade maxima ");
       print("O carro está no limite: ${estaNoLimite()}");
