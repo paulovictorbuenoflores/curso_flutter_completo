@@ -12,7 +12,15 @@ void main(List<String> args) {
 
   print(carro.toString());
 
+  carro.frear();
+  carro.frear();
+  carro.frear();
+  carro.frear();
+  carro.frear();
+  carro.frear();
+  carro.frear();
+  carro.frear();
+
   //carro.frear();
   //print("Apertou o Freio!\n " + carro.toString());
-  //carro.frear();
 }
