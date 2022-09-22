@@ -1,4 +1,4 @@
-import 'modelo/carro.dart';
+import 'carro.dart';
 
 void main(List<String> args) {
   Carro carro = new Carro.velocidadeMax(velocidadeMaxima: 27);
