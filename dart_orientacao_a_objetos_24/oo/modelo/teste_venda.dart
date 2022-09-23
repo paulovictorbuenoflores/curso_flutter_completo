@@ -13,7 +13,7 @@ void main(List<String> args) {
             produto:
                 Produto(codigo: 1, nome: 'Caneta Bic', preco: 5, desconto: 0.5))
       ]);
-
+  print("Parabéns, ${venda.cliente!.nome}  exelente compra");
   print("valor total da venda é : R\$${venda.valorTotal}");
   print("Nome do primeiro produtoo é : ${venda.itens[0].produto!.nome}");
 }
