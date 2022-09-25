@@ -8,7 +8,12 @@ void main(List<String> args) {
 class PerguntaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Text("ola mundo!"),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Perguntas'),
+        ),
+        body: Text('Olar Mundo!'),
+      ),
     );
   }
 }
