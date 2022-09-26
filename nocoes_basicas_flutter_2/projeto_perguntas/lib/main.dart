@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main(List<String> args) => runApp(PerguntaApp());
-void responder() {
-  print('Pergunta responddida!');
-}
 
-class PerguntaApp extends StatelessWidget {
+class PerguntaAppState extends State<PerguntaApp> {
+  var perguntaSelecionada = 0;
+  void responder() {
+    perguntaSelecionada++;
+    print(perguntaSelecionada);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<String> perguntas = [
@@ -30,5 +33,12 @@ class PerguntaApp extends StatelessWidget {
         ],
       ),
     ));
+  }
+}
+
+class PerguntaApp extends StatefulWidget {
+  @override
+  PerguntaAppState createState() {
+    return PerguntaAppState();
   }
 }
