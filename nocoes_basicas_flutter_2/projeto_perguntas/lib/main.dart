@@ -30,12 +30,18 @@ class PerguntaAppState extends State<PerguntaApp> {
             texto: perguntas[_perguntaSelecionada],
           ),
           Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 16),
               child: RaisedButton(
                   child: Text("Resposta 1"), onPressed: _responder)),
           Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 16),
               child: RaisedButton(
                   child: Text('Resposta 2'), onPressed: _responder)),
           Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 16),
               child: RaisedButton(
                   child: Text('Resposta 3'), onPressed: _responder)),
         ],
