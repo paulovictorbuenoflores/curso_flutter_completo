@@ -14,7 +14,7 @@ class PerguntaAppState extends State<PerguntaApp> {
   Widget build(BuildContext context) {
     final List<String> perguntas = [
       'Qual é a sua cor favorita?',
-      'Qual é o seu animal favorito?'
+      'Qual é o seu animal favorito?',
     ];
 
     return MaterialApp(
@@ -22,14 +22,16 @@ class PerguntaAppState extends State<PerguntaApp> {
       appBar: AppBar(title: Text('Perguntas')),
       body: Column(
         children: [
-          Text(perguntas[0]),
+          Text(perguntas[perguntaSelecionada]),
           Container(
               child: RaisedButton(
-                  child: Text('Resposta 1'), onPressed: responder)),
+                  child: Text("Resposta 1"), onPressed: responder)),
           Container(
-              child: RaisedButton(child: Text('Resposta 2'), onPressed: () {})),
+              child: RaisedButton(
+                  child: Text('Resposta 2'), onPressed: responder)),
           Container(
-              child: RaisedButton(child: Text('Resposta 3'), onPressed: () {})),
+              child: RaisedButton(
+                  child: Text('Resposta 3'), onPressed: responder)),
         ],
       ),
     ));
