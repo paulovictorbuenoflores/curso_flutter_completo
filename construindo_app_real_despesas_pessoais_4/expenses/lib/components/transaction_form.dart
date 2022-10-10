@@ -1,3 +1,4 @@
+import 'package:expenses/components/transaction_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -6,6 +7,10 @@ import 'package:flutter/src/widgets/framework.dart';
 class TransactionForm extends StatelessWidget {
   final titleController = TextEditingController();
   final valueController = TextEditingController();
+
+  final void Function(String, double) onSubmit;
+  TransactionForm(this.onSubmit);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -36,8 +41,9 @@ class TransactionForm extends StatelessWidget {
                 children: [
                   FlatButton(
                     onPressed: () {
-                      print(titleController.text);
-                      print(valueController.text);
+                      final title = titleController.text;
+                      final value = double.tryParse(valueController.text) ?? 0;
+                      onSubmit(title, value);
                     },
                     textColor: Colors.purple,
                     child: Text('Nova Transação'),
