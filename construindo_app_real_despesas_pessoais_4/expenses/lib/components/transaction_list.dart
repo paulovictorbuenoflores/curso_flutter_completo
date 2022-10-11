@@ -13,9 +13,11 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
-      child: ListView(
-        children: _transactions.map((tr) {
+      height: 500,
+      child: ListView.builder(
+        itemCount: _transactions.length,
+        itemBuilder: (ctx, index) {
+          final tr = _transactions[index];
           return Card(
             child: Row(
               children: <Widget>[
@@ -56,7 +58,7 @@ class TransactionList extends StatelessWidget {
               ],
             ),
           );
-        }).toList(),
+        },
       ),
     );
   }
