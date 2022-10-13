@@ -30,6 +30,7 @@ class TransactionForm extends StatelessWidget {
             TextField(
               //  onChanged: (novoValor) => valor = novoValor,
               controller: valueController,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Valor (R\$)',
               ),
