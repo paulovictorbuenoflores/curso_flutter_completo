@@ -10,6 +10,15 @@ class TransactionForm extends StatelessWidget {
 
   final void Function(String, double) onSubmit;
   TransactionForm(this.onSubmit);
+  _submitForm() {
+    final title = titleController.text;
+    final value = double.tryParse(valueController.text) ?? 0;
+    if (title.isEmpty || value <= 0) {
+      return;
+    }
+
+    onSubmit(title, value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +50,7 @@ class TransactionForm extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FlatButton(
-                    onPressed: () {
-                      final title = titleController.text;
-                      final value = double.tryParse(valueController.text) ?? 0;
-                      onSubmit(title, value);
-                    },
+                    onPressed: _submitForm,
                     textColor: Colors.purple,
                     child: Text('Nova Transação'),
                   ),
