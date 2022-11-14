@@ -40,6 +40,7 @@ class TransactionForm extends StatelessWidget {
               //  onChanged: (novoValor) => valor = novoValor,
               controller: valueController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
+              onSubmitted: ((_) => _submitForm()),
               decoration: InputDecoration(
                 labelText: 'Valor (R\$)',
               ),
