@@ -38,7 +38,7 @@ class Chart extends StatelessWidget {
     groupedTransactions;
     return Card(
       elevation: 6,
-      margin: EdgeInsets.all(20),
+      margin: EdgeInsets.all(10),
       child: Row(
         children: groupedTransactions.map((tr) {
           return ChartBar(
