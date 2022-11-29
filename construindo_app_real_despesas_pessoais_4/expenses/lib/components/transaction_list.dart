@@ -40,6 +40,8 @@ class TransactionList extends StatelessWidget {
                 final tr = _transactions[index];
                 return Card(
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
                         margin:
