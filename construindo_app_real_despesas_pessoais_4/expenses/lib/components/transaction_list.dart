@@ -7,13 +7,14 @@ import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> _transactions;
-
-  TransactionList(this._transactions);
+  final void Function(String)
+      onRemove; // essa funcao vai retornar void, vai receber uma string
+  TransactionList(this._transactions, this.onRemove);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 450,
       child: _transactions.isEmpty
           ? Column(
               children: <Widget>[
@@ -39,6 +40,7 @@ class TransactionList extends StatelessWidget {
               itemBuilder: (ctx, index) {
                 final tr = _transactions[index];
                 return Card(
+                  //cada linha da lista
                   elevation: 5,
                   margin: EdgeInsets.symmetric(
                     vertical: 8,
@@ -60,6 +62,11 @@ class TransactionList extends StatelessWidget {
                     ),
                     subtitle: Text(
                       DateFormat('d MMM y').format(tr.date),
+                    ),
+                    trailing: IconButton(
+                      color: Theme.of(context).errorColor,
+                      icon: Icon(Icons.delete),
+                      onPressed: () => onRemove(tr.id),
                     ),
                   ),
                 );

@@ -41,23 +41,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
     Transaction(
-      id: 't1',
-      title: 'Novo tenis',
-      value: 400.00,
-      date: DateTime.now().subtract(Duration(days: 33)),
-    ),
+        id: 't0', title: 'colete alpinestar', value: 700, date: DateTime.now()),
     Transaction(
-      id: "t2",
-      title: 'Conta de Luz',
-      value: 211.30,
-      date: DateTime.now().subtract(Duration(days: 4)),
-    ),
+        id: 't1', title: 'Leatt Brace', value: 800, date: DateTime.now()),
     Transaction(
-      id: 't1',
-      title: 'Novo tenis',
-      value: 310.76,
-      date: DateTime.now().subtract(Duration(days: 3)),
-    ),
+        id: 't2',
+        title: 'Kit camisa Fox + calça',
+        value: 1250,
+        date: DateTime.now()),
+    Transaction(
+        id: 't3', title: 'Joelheira Fox', value: 750, date: DateTime.now()),
+    Transaction(id: 't4', title: 'Luva Fox', value: 200, date: DateTime.now()),
+    Transaction(
+        id: 't5', title: 'óculos Leatt', value: 700, date: DateTime.now()),
   ];
   List<Transaction> get _recentTransations {
     return _transactions.where((tr) {
@@ -67,12 +63,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  _addTransaction(String title, double value) {
+  _addTransaction(String title, double value, DateTime data) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: data,
     );
 
     setState(() {
@@ -89,6 +85,20 @@ class _MyHomePageState extends State<MyHomePage> {
         return TransactionForm(_addTransaction);
       },
     );
+  }
+
+  _deleteTransaction(String id) {
+    //chamos o metodo setSatate para que possamos setar o estado para alterar a lista de transacao
+    /* setState(() {
+      _transactions.removeWhere((element) {
+        return element.id == id;
+      });
+    });*/
+
+    //forma simplificada
+    setState(() {
+      _transactions.removeWhere((element) => element.id == id);
+    });
   }
 
   @override
@@ -109,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransations),
-            TransactionList(_transactions),
+            TransactionList(_transactions, _deleteTransaction),
             //Column(),
             //TransactionList(_transactions),
             // TransactionForm(),
