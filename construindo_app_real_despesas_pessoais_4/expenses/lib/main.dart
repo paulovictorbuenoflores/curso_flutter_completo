@@ -16,7 +16,7 @@ class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //para a orientacao ser apenas no modo retrato para cima
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
       home: MyHomePage(),
       theme: ThemeData(
@@ -42,6 +42,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _showChart = false;
   final List<Transaction> _transactions = [
     Transaction(
         id: 't0', title: 'colete alpinestar', value: 700, date: DateTime.now()),
@@ -106,6 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandscap =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text(
         'Despesas Pessoais',
@@ -131,12 +134,29 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-                height: alturaDisponivel * 0.35,
-                child: Chart(_recentTransations)),
-            Container(
-                height: alturaDisponivel * 0.65,
-                child: TransactionList(_transactions, _deleteTransaction)),
+            if (isLandscap)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Exibir Gráfico'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (value) {
+                      setState(() {
+                        _showChart = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            if (_showChart || !isLandscap)
+              Container(
+                  height: alturaDisponivel * (isLandscap ? 0.7 : 0.3),
+                  child: Chart(_recentTransations)),
+            if (!_showChart || !isLandscap)
+              Container(
+                  height: alturaDisponivel * 0.70,
+                  child: TransactionList(_transactions, _deleteTransaction)),
             //Column(),
             //TransactionList(_transactions),
             // TransactionForm(),

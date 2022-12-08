@@ -1,6 +1,7 @@
 import 'package:expenses/models/transaction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
@@ -14,24 +15,33 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _transactions.isEmpty
-        ? Column(
-            children: <Widget>[
-              SizedBox(height: 20),
-              Text(
-                'Nenhuma Transação cadastrada',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 200,
-                child: Image.asset(
-                  'assets/images/waiting.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
+        ? LayoutBuilder(
+            builder: (ctx, Constraints) {
+              return Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: Constraints.maxHeight * 0.05,
+                  ),
+                  Container(
+                    height: Constraints.maxHeight * 0.3,
+                    child: Text(
+                      'Nenhuma Transação cadastrada',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  SizedBox(
+                    height: Constraints.maxHeight * 0.05,
+                  ),
+                  Container(
+                    height: Constraints.maxHeight * 0.6,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              );
+            },
           )
         : ListView.builder(
             itemCount: _transactions.length,
