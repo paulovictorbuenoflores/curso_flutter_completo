@@ -42,27 +42,24 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     groupedTransactions;
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.4,
-      child: Card(
-        elevation: 6,
-        margin: EdgeInsets.all(10),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: groupedTransactions.map((tr) {
-              return Flexible(
-                fit: FlexFit.tight,
-                child: ChartBar(
-                  label: tr['day'].toString(),
-                  value: double.parse(tr['value'].toString()),
-                  percentage: _valorTotalDaSemana == 0
-                      ? 0
-                      : (tr['value'] as double) / _valorTotalDaSemana,
-                ),
-              );
-            }).toList(),
-          ),
+    return Card(
+      elevation: 6,
+      margin: EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: groupedTransactions.map((tr) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                label: tr['day'].toString(),
+                value: double.parse(tr['value'].toString()),
+                percentage: _valorTotalDaSemana == 0
+                    ? 0
+                    : (tr['value'] as double) / _valorTotalDaSemana,
+              ),
+            );
+          }).toList(),
         ),
       ),
     );

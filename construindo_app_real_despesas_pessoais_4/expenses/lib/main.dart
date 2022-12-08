@@ -5,6 +5,7 @@ import 'package:expenses/components/transaction_list.dart';
 
 import 'package:expenses/models/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import 'components/chart.dart';
@@ -14,6 +15,8 @@ void main(List<String> args) => runApp(ExpensesApp());
 class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //para a orientacao ser apenas no modo retrato para cima
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
       home: MyHomePage(),
       theme: ThemeData(
@@ -103,23 +106,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Despesas Pessoais'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _openTransactionFormModal(context),
-          ),
-        ],
+    final appBar = AppBar(
+      title: Text(
+        'Despesas Pessoais',
+        style: TextStyle(
+          fontSize: 20 * MediaQuery.of(context).textScaleFactor,
+        ),
       ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _openTransactionFormModal(context),
+        ),
+      ],
+    );
+
+    final alturaDisponivel =
+        ((MediaQuery.of(context).size.height) - appBar.preferredSize.height) -
+            MediaQuery.of(context).padding.top;
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_recentTransations),
-            TransactionList(_transactions, _deleteTransaction),
+            Container(
+                height: alturaDisponivel * 0.35,
+                child: Chart(_recentTransations)),
+            Container(
+                height: alturaDisponivel * 0.65,
+                child: TransactionList(_transactions, _deleteTransaction)),
             //Column(),
             //TransactionList(_transactions),
             // TransactionForm(),
