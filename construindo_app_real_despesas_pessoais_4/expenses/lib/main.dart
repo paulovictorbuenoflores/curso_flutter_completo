@@ -107,13 +107,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLandscap =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+
+    bool isLandscap = mediaQuery.orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text(
         'Despesas Pessoais',
         style: TextStyle(
-          fontSize: 20 * MediaQuery.of(context).textScaleFactor,
+          fontSize: 20 * mediaQuery.textScaleFactor,
         ),
       ),
       actions: <Widget>[
@@ -134,8 +135,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final alturaDisponivel =
-        ((MediaQuery.of(context).size.height) - appBar.preferredSize.height) -
-            MediaQuery.of(context).padding.top;
+        ((mediaQuery.size.height) - appBar.preferredSize.height) -
+            mediaQuery.padding.top;
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
