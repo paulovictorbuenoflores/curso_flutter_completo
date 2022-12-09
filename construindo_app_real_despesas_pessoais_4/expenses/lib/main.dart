@@ -117,6 +117,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       actions: <Widget>[
+        if (isLandscap)
+          IconButton(
+            icon: Icon(_showChart ? Icons.list : Icons.bar_chart),
+            onPressed: () {
+              setState(() {
+                _showChart = !_showChart;
+              });
+            },
+          ),
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () => _openTransactionFormModal(context),
@@ -134,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            if (isLandscap)
+            /* if (isLandscap)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -148,14 +157,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                 ],
-              ),
+              ),*/
             if (_showChart || !isLandscap)
               Container(
-                  height: alturaDisponivel * (isLandscap ? 0.7 : 0.3),
+                  height: alturaDisponivel * (isLandscap ? 0.8 : 0.3),
                   child: Chart(_recentTransations)),
             if (!_showChart || !isLandscap)
               Container(
-                  height: alturaDisponivel * 0.70,
+                  height: alturaDisponivel * (isLandscap ? 1 : 0.70),
                   child: TransactionList(_transactions, _deleteTransaction)),
             //Column(),
             //TransactionList(_transactions),
