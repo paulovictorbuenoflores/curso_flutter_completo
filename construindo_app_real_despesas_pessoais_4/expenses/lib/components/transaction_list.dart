@@ -14,6 +14,7 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     return _transactions.isEmpty
         ? LayoutBuilder(
             builder: (ctx, Constraints) {
@@ -71,7 +72,7 @@ class TransactionList extends StatelessWidget {
                   subtitle: Text(
                     DateFormat('d MMM y').format(tr.date),
                   ),
-                  trailing: MediaQuery.of(context).size.width > 400
+                  trailing: mediaQuery.size.width > 400
                       ? FlatButton.icon(
                           onPressed: () => onRemove(tr.id),
                           icon: Icon(Icons.delete,
