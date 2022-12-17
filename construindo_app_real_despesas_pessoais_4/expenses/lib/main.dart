@@ -117,6 +117,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     bool isLandscap = mediaQuery.orientation == Orientation.landscape;
+
+    final iconList = Platform.isIOS ? CupertinoIcons.refresh : Icons.list;
+    final chartList =
+        Platform.isIOS ? CupertinoIcons.refresh : Icons.show_chart;
     final actions = <Widget>[
       if (isLandscap)
         _getIconButton(
@@ -128,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       _getIconButton(
-        Icons.add,
+        Platform.isIOS ? CupertinoIcons.add : Icons.add,
         () => _openTransactionFormModal(context),
       ),
     ];
@@ -161,12 +165,13 @@ class _MyHomePageState extends State<MyHomePage> {
         (((mediaQuery.size.height) - appBar.preferredSize.height) -
             mediaQuery.padding.top);
 
-    final badyPage = SingleChildScrollView(
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          /*if (isLandscap)
+    final badyPage = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            /*if (isLandscap)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -182,21 +187,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),*/
-          if (_showChart || !isLandscap)
-            Container(
-                height: alturaDisponivel * (isLandscap ? 0.8 : 0.3),
-                child: Chart(_recentTransations)),
-          if (!_showChart || !isLandscap)
-            Container(
-                height: alturaDisponivel * (isLandscap ? 1 : 0.70),
-                child: TransactionList(_transactions, _deleteTransaction)),
-          //Column(),
-          //TransactionList(_transactions),
-          // TransactionForm(),
-          //  TransactionUser(),
-        ],
+            if (_showChart || !isLandscap)
+              Container(
+                  height: alturaDisponivel * (isLandscap ? 0.8 : 0.3),
+                  child: Chart(_recentTransations)),
+            if (!_showChart || !isLandscap)
+              Container(
+                  height: alturaDisponivel * (isLandscap ? 1 : 0.70),
+                  child: TransactionList(_transactions, _deleteTransaction)),
+            //Column(),
+            //TransactionList(_transactions),
+            // TransactionForm(),
+            //  TransactionUser(),
+          ],
+        ),
       ),
     );
+
     return Platform.isIOS
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
