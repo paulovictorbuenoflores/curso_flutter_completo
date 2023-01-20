@@ -26,7 +26,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _tam = 32.0;
+  double _tam = 32.0;
 
   void aumentar() {
     setState(() {
@@ -46,7 +46,30 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Entendendo stateful e estrutura inicial'),
       ),
-      body: FlutterLogo(size: _tam),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FlutterLogo(
+            size: _tam,
+          ),
+          Row(
+            children: [
+              FlatButton(
+                child: Icon(
+                  Icons.add,
+                ),
+                onPressed: aumentar,
+              ),
+              FlatButton(
+                child: Icon(
+                  Icons.remove,
+                ),
+                onPressed: diminuir,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
