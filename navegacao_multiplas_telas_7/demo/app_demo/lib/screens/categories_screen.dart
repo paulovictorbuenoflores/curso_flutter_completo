@@ -13,6 +13,8 @@ class CategoriesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Vamos Cozinhar?')),
       body: GridView(
+        padding: const EdgeInsets.all(25),
+
         /**Slive no flutter é uma area que tem scrow, grid delegate  seria uma forma de voce delegar como esse grid sera renderizada */
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent:

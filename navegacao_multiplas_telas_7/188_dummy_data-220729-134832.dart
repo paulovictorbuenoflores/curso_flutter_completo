@@ -1,10 +1,8 @@
-//dados mocados
 import 'package:flutter/material.dart';
-
 import '../models/category.dart';
 import '../models/meal.dart';
 
-const DUMMY_CATEGORIES = const [
+const dummyCategories = [
   Category(
     id: 'c1',
     title: 'Italiano',
@@ -28,7 +26,7 @@ const DUMMY_CATEGORIES = const [
   Category(
     id: 'c5',
     title: 'Leve & Saudável',
-    color: Colors.brown,
+    color: Colors.indigo,
   ),
   Category(
     id: 'c6',
@@ -57,7 +55,7 @@ const DUMMY_CATEGORIES = const [
   ),
 ];
 
-const DUMMY_MEALS = [
+const dummyMeals = [
   Meal(
     id: 'm1',
     categories: ['c1', 'c2'],
