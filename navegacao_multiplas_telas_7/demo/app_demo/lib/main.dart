@@ -30,6 +30,28 @@ class MyApp extends StatelessWidget {
         AppRoutes.CATEGORY_MEALS: ((ctx) => CategoriesMealsScreen()),
         AppRoutes.MEAL_DETAIL: ((ctx) => MealDetailScreen()),
       },
+      //esse metodo é como o erro 404, quando nao acha a pagina retorna outra coisa no lugar, pra nao da erro
+      onGenerateRoute: ((settings) {
+        if (settings.name == '/alguma-coisa') {
+          return null;
+        } else if (settings.name == '/outra_coisa') {
+          return null;
+        } else {
+          return MaterialPageRoute(
+            builder: (_) {
+              return CategoriesScreen();
+            },
+          );
+        }
+      }),
+
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) {
+            return CategoriesScreen();
+          },
+        )
+      },
     );
   }
 }
