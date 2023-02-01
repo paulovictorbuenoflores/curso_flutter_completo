@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import './screens/categories_screen.dart';
+import './screens/tabs_screen.dart';
 
 void main(List<String> args) => runApp(MyApp());
 
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
       // home: MyHomePage(),
       // home: CategoriesScreen(),
       routes: {
-        AppRoutes.HOME: ((ctx) => CategoriesScreen()),
+        //AppRoutes.HOME: ((ctx) => CategoriesScreen()),
+        AppRoutes.HOME: ((ctx) => TabsScreen()),
         AppRoutes.CATEGORY_MEALS: ((ctx) => CategoriesMealsScreen()),
         AppRoutes.MEAL_DETAIL: ((ctx) => MealDetailScreen()),
       },
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
           builder: (context) {
             return CategoriesScreen();
           },
-        )
+        );
       },
     );
   }
