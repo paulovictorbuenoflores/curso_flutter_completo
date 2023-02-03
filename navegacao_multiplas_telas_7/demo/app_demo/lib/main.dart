@@ -1,5 +1,6 @@
 import 'package:app_demo/screens/categories_meals_screen.dart';
 import 'package:app_demo/screens/meal_detail_screen.dart';
+import 'package:app_demo/screens/settings_screen.dart';
 import 'package:app_demo/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.HOME: ((ctx) => TabsScreen()),
         AppRoutes.CATEGORY_MEALS: ((ctx) => CategoriesMealsScreen()),
         AppRoutes.MEAL_DETAIL: ((ctx) => MealDetailScreen()),
+        AppRoutes.SETTINGS: ((ctx) => SettingsScreen()),
       },
       //esse metodo é como o erro 404, quando nao acha a pagina retorna outra coisa no lugar, pra nao da erro
       onGenerateRoute: ((settings) {
