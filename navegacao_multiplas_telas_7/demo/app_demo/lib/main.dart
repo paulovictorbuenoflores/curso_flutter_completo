@@ -1,3 +1,4 @@
+import 'package:app_demo/models/settings.dart';
 import 'package:app_demo/screens/categories_meals_screen.dart';
 import 'package:app_demo/screens/meal_detail_screen.dart';
 import 'package:app_demo/screens/settings_screen.dart';
@@ -8,9 +9,50 @@ import 'package:flutter/src/widgets/framework.dart';
 import './screens/categories_screen.dart';
 import './screens/tabs_screen.dart';
 
+import './models/meal.dart';
+import './data/dummy_data.dart';
+
 void main(List<String> args) => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+//para guardar o estado da configuracao
+  Settings settings = Settings();
+
+  List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoritMeals = [];
+  void _filterMeals(Settings settings) {
+    setState(() {
+      this.settings = settings;
+      _availableMeals = DUMMY_MEALS.where((meal) {
+        final filterGluten = settings.isGlutenFree && !meal.isGlutenFree;
+        final filterLactose = settings.isLactoseFree && !meal.isLactoseFree;
+        final filterVegan = settings.isVegan && !meal.isVegan;
+        final filterVegetarian = settings.isVegetarian && !meal.isVegetarian;
+        return !filterGluten &&
+            !filterLactose &&
+            !filterVegan &&
+            !filterVegetarian;
+      }).toList();
+    });
+  }
+
+  void _toggleFavoriit(Meal meal) {
+    setState(() {
+      _favoritMeals.contains(meal)
+          ? _favoritMeals.remove(meal)
+          : _favoritMeals.add(meal);
+    });
+  }
+
+  bool _isFavorite(Meal meal) {
+    return _favoritMeals.contains(meal);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,10 +71,12 @@ class MyApp extends StatelessWidget {
       // home: CategoriesScreen(),
       routes: {
         //AppRoutes.HOME: ((ctx) => CategoriesScreen()),
-        AppRoutes.HOME: ((ctx) => TabsScreen()),
-        AppRoutes.CATEGORY_MEALS: ((ctx) => CategoriesMealsScreen()),
-        AppRoutes.MEAL_DETAIL: ((ctx) => MealDetailScreen()),
-        AppRoutes.SETTINGS: ((ctx) => SettingsScreen()),
+        AppRoutes.HOME: ((ctx) => TabsScreen(_favoritMeals)),
+        AppRoutes.CATEGORY_MEALS: ((ctx) =>
+            CategoriesMealsScreen(_availableMeals)),
+        AppRoutes.MEAL_DETAIL: ((ctx) =>
+            MealDetailScreen(_toggleFavoriit, _isFavorite)),
+        AppRoutes.SETTINGS: ((ctx) => SettingsScreen(settings, _filterMeals)),
       },
       //esse metodo é como o erro 404, quando nao acha a pagina retorna outra coisa no lugar, pra nao da erro
       onGenerateRoute: ((settings) {

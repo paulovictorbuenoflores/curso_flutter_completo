@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'categories_screen.dart';
 import 'favorite_screen.dart';
 import '../components/main_drawer.dart';
-import '../models/meal.dart';
 
 class TabsScreen extends StatefulWidget {
-  final List<Meal> favoriteMeals;
-  TabsScreen(this.favoriteMeals);
+  const TabsScreen({Key? key}) : super(key: key);
 
   @override
   State<TabsScreen> createState() => _TabsScreenState();
@@ -17,22 +12,11 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedScreenIndex = 0;
-  List<Map<String, Object>> _screens = [];
 
-  @override
-  initState() {
-    super.initState();
-    _screens = [
-      {
-        'title': 'Lista de Categorias',
-        'screen': CategoriesScreen(),
-      },
-      {
-        'title': 'Meus Favoritos',
-        'screen': FavoriteScreen(widget.favoriteMeals),
-      },
-    ];
-  }
+  final List<Map<String, Object>> _screens = [
+    {'title': 'Lista de Categorias', 'screen': const CategoriesScreen()},
+    {'title': 'Meus Favoritos', 'screen': const FavoriteScreen()},
+  ];
 
   _selectScreen(int index) {
     setState(() {
@@ -44,16 +28,19 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_screens[_selectedScreenIndex]['title'] as String),
+        title: Text(
+          _screens[_selectedScreenIndex]['title'] as String,
+        ),
       ),
-      drawer: MainDrawer(),
+      drawer: const MainDrawer(),
       body: _screens[_selectedScreenIndex]['screen'] as Widget,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        onTap: _selectScreen,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.white,
-        selectedItemColor: Theme.of(context).accentColor,
-        //type: BottomNavigationBarType.shifting,
-        items: const <BottomNavigationBarItem>[
+        selectedItemColor: Theme.of(context).colorScheme.secondary,
+        currentIndex: _selectedScreenIndex,
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.category),
             label: 'Categorias',
@@ -63,8 +50,6 @@ class _TabsScreenState extends State<TabsScreen> {
             label: 'Favoritos',
           ),
         ],
-        currentIndex: _selectedScreenIndex,
-        onTap: (op) => _selectScreen(op),
       ),
     );
   }
