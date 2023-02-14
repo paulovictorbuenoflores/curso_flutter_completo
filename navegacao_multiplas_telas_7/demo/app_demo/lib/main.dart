@@ -3,14 +3,14 @@ import 'package:app_demo/screens/categories_meals_screen.dart';
 import 'package:app_demo/screens/meal_detail_screen.dart';
 import 'package:app_demo/screens/settings_screen.dart';
 import 'package:app_demo/utils/app_routes.dart';
+import './screens/categories_screen.dart';
+import './screens/tabs_screen.dart';
+import './models/meal.dart';
+import './data/dummy_data.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import './screens/categories_screen.dart';
-import './screens/tabs_screen.dart';
-
-import './models/meal.dart';
-import './data/dummy_data.dart';
 
 void main(List<String> args) => runApp(MyApp());
 
