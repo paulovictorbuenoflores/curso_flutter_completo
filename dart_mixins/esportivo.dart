@@ -1,11 +1,11 @@
 mixin Esportivo {
-  bool _turboLigado = false;
+  bool turboLigado = false;
 
   ligarTurbo() {
-    _turboLigado = true;
+    turboLigado = true;
   }
 
   desligarTurbo() {
-    _turboLigado = false;
+    turboLigado = false;
   }
 }
