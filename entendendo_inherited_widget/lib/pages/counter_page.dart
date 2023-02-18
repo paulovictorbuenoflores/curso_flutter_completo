@@ -21,41 +21,61 @@ class _CounterPageState extends State<CounterPage> {
       ),
       body: Column(
         children: [
-          Text(provider?.state.value.toString() ?? '0'),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                provider?.state.inc();
-              });
+          Card(
+            elevation: 5,
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      provider?.state.inc();
+                    });
 
-              print(provider?.state.value);
-            },
-            icon: Icon(Icons.add),
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                provider?.state.dec();
-              });
+                    print(provider?.state.value);
+                  },
+                  icon: Icon(Icons.add),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      provider?.state.dec();
+                    });
 
-              print(provider?.state.value);
-            },
-            icon: Icon(Icons.remove),
+                    print(provider?.state.value);
+                  },
+                  icon: Icon(Icons.remove),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(
+                      left: 10, top: 2.5, bottom: 10, right: 10),
+                  child: Text(
+                    '|',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 45,
+                    ),
+                  ),
+                ),
+                Text(
+                  '${provider?.state.value.toString() ?? '0'}',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontSize: 40,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: IconButton(
-          onPressed: () {
-            setState(() {
-              provider?.state.inc();
-            });
-
-            print(provider?.state.value);
-          },
-          icon: Icon(Icons.add),
-        ),
+        onPressed: () {
+          setState(() {
+            provider?.state.inc();
+          });
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
