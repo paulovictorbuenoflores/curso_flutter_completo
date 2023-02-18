@@ -8,6 +8,7 @@ void main(List<String> args) {
   var carro1 = new Ferrarie();
   print(carro1.acelerar());
   carro1.frear();
+  //usando o mixin
   carro1.ligarTurbo();
   print(carro1.acelerar());
 }
