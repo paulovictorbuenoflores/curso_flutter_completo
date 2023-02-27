@@ -9,6 +9,11 @@ class ProductList with ChangeNotifier {
 
   void addProduct(Product product) {
     _items.add(product);
-    notifyListeners();
+    notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
   }
 }
+/**
+ * Estamos usando o mixin para implementar o ChangeNotifier, o objetivo é notificar os interessados 
+ * na lista de produtos, toda vez que alguma coisa nela mudar, para notificar os interessados atraves do changeNotifier usamos 
+ * o metodo notifyListeners(), no metodo que é alterado quando alguma coisa acontece, no nosso caso é o metodo de adicionar um novo produto na lista. 
+ */

@@ -32,4 +32,12 @@ final List<Product> dummyProducts = [
     imageUrl:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
   ),
+  Product(
+    id: 'p5',
+    title: 'shoe',
+    description: 'Prepare any meal you want.',
+    price: 49.99,
+    imageUrl:
+        'https://mundialcalcados.vteximg.com.br/arquivos/ids/2415925-1000-1500/98g14769-1.jpg?v=638025815248030000',
+  ),
 ];
