@@ -30,6 +30,8 @@ class ProductItem extends StatelessWidget {
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
+            //no builder temos 3 parametros, (BuildContext "contexto", objeto "product", child "widget")
+            //o terceiro parametro, child é o componente que nunca muda
             builder: (ctx, product, _) => IconButton(
               onPressed: () {
                 product.alternanciaFavorito();
