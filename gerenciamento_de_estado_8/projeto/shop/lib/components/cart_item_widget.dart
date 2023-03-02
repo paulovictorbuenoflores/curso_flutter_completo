@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/models/cart_item.dart';
+
+import '../models/cart.dart';
 
 class CartItemWidget extends StatelessWidget {
   final CartItem cartItem;
@@ -13,6 +16,24 @@ class CartItemWidget extends StatelessWidget {
     return Dismissible(
       key: ValueKey(cartItem.id),
       direction: DismissDirection.endToStart,
+      background: Container(
+        color: Theme.of(context).errorColor,
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: 40,
+        ),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        margin: EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
+        ),
+      ),
+      onDismissed: (_) {
+        Provider.of<Cart>(context, listen: false)
+            .removeItem(cartItem.productId);
+      },
       child: Card(
         margin: EdgeInsets.symmetric(
           horizontal: 15,
