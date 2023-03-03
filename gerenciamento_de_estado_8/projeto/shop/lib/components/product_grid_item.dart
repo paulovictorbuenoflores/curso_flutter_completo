@@ -7,7 +7,7 @@ import 'package:shop/models/product.dart';
 import 'package:shop/pages/product_detail_page.dart';
 import 'package:shop/utils/app_routes.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductGridItem extends StatelessWidget {
   // final Product product;
 
 //  ProductItem(this.product);
@@ -50,7 +50,18 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             onPressed: () {
               cart.addItem(product);
-              print(cart.itemsCount);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Produto adicionado com sucesso!'),
+                  duration: Duration(seconds: 2),
+                  action: SnackBarAction(
+                    label: 'DESFAZER',
+                    onPressed: () {
+                      cart.removeSingleItem(product.id);
+                    },
+                  ),
+                ),
+              );
             },
             icon: Icon(Icons.shopping_cart),
             color: Theme.of(context).accentColor,
