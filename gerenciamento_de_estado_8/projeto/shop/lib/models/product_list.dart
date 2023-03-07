@@ -8,6 +8,12 @@ class ProductList with ChangeNotifier {
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
       _items.where((prod) => prod.isFavorite).toList();
+
+  int get itemsCount {
+    // notifyListeners();
+    return _items.length;
+  }
+
   void addProduct(Product product) {
     _items.add(product);
     notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
