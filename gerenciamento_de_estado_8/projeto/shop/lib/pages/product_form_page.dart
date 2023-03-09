@@ -1,8 +1,13 @@
+//img teste Url: http://www.libpng.org/pub/png/img_png/pengbrew_160x160.png
+
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:shop/components/app_drawer.dart';
+import 'package:shop/models/product.dart';
 
 class ProductFormPage extends StatefulWidget {
   @override
@@ -37,9 +42,36 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {});
   }
 
+  bool isValidImageUrl(String url) {
+    bool isValidUrl = Uri.tryParse(url)?.hasAbsolutePath ?? false;
+    bool endsWithFile = url.toLowerCase().endsWith('.png') ||
+        url.toLowerCase().endsWith('.jpg') ||
+        url.toLowerCase().endsWith('.jpeg');
+
+    return isValidUrl && endsWithFile;
+  }
+
   void _submitForm() {
-    _formKey.currentState?.save();
+    final isValid = _formKey.currentState?.validate() ??
+        false; //valida os campos do formulario
+    _formKey.currentState?.save(); //salva o formulario
     print(_formData);
+
+    if (!isValid) {
+      return;
+    }
+
+    final newProduct = Product(
+      id: Random().nextDouble().toString(),
+      name: _formData['name'] as String,
+      description: _formData['description'] as String,
+      price: _formData['price'] as double,
+      imageUrl: _formData['imageUrl'] as String,
+    );
+    print(newProduct.id);
+    print(newProduct.name);
+    print(newProduct.description);
+    print(newProduct.imageUrl);
   }
 
   @override
@@ -68,6 +100,19 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   FocusScope.of(context).requestFocus(_priceFocus);
                 },
                 onSaved: (name) => _formData['name'] = name ?? '',
+
+                //sempre que retornar algo diferente de nulo vai mostrar mesagem de erro
+                validator: (_name) {
+                  final name = _name ?? '';
+                  //trim tira os espacos em branco
+                  if (name.trim().isEmpty) {
+                    return 'Nome é Obrigatorio';
+                  }
+                  if (name.trim().length < 3) {
+                    return 'Nome precisa no mínimo de 3 letras.';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Preço'),
@@ -80,6 +125,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 },
                 onSaved: (price) =>
                     _formData['price'] = double.parse(price ?? '0'),
+                validator: (_price) {
+                  final price = _price ?? '';
+                  //trim tira os espacos em branco
+                  if (price.trim().isEmpty) {
+                    return 'Preço é Obrigatorio';
+                  }
+                  if (double.parse(price.trim()) == 0) {
+                    return 'Informe um preço justo.';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Descrição'),
@@ -89,6 +145,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 maxLines: 3,
                 onSaved: (description) =>
                     _formData['description'] = description ?? '',
+                validator: (_description) {
+                  final description = _description ?? '';
+                  //trim tira os espacos em branco
+                  if (description.trim().isEmpty) {
+                    return 'Descrição é Obrigatorio';
+                  }
+                  if (description.trim().length < 8) {
+                    return 'Descrição precisa no mínimo de 8 letras.';
+                  }
+                  return null;
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -101,6 +168,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       focusNode: _imageUrlFocus,
                       controller: _imageUrlController,
                       onFieldSubmitted: (_) => _submitForm(),
+                      onSaved: (imageUrl) =>
+                          _formData['imageUrl'] = imageUrl ?? '',
+                      validator: (_imageUrl) {
+                        final imageUrl = _imageUrl ?? '';
+
+                        if (!isValidImageUrl(imageUrl)) {
+                          return 'Informe uma Url válida!';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Container(
