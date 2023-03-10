@@ -3,11 +3,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
+
 import 'package:shop/components/app_drawer.dart';
 import 'package:shop/models/product.dart';
+import 'package:shop/models/product_list.dart';
 
 class ProductFormPage extends StatefulWidget {
   @override
@@ -68,6 +68,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
       price: _formData['price'] as double,
       imageUrl: _formData['imageUrl'] as String,
     );
+
+    Provider.of<ProductList>(context, listen: false).addProduct(newProduct);
+    Navigator.of(context).pop();
     print(newProduct.id);
     print(newProduct.name);
     print(newProduct.description);
@@ -126,14 +129,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 onSaved: (price) =>
                     _formData['price'] = double.parse(price ?? '0'),
                 validator: (_price) {
-                  final price = _price ?? '';
+                  final priceString = _price ?? '-1';
+                  final price = double.tryParse(priceString) ?? -1;
                   //trim tira os espacos em branco
-                  if (price.trim().isEmpty) {
-                    return 'Preço é Obrigatorio';
+                  if (price <= 0) {
+                    return 'Informe um preço válido.';
                   }
-                  if (double.parse(price.trim()) == 0) {
-                    return 'Informe um preço justo.';
-                  }
+
                   return null;
                 },
               ),
