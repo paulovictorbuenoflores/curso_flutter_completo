@@ -61,20 +61,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
       return;
     }
 
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      name: _formData['name'] as String,
-      description: _formData['description'] as String,
-      price: _formData['price'] as double,
-      imageUrl: _formData['imageUrl'] as String,
-    );
-
-    Provider.of<ProductList>(context, listen: false).addProduct(newProduct);
+    Provider.of<ProductList>(context, listen: false)
+        .addProductFromData(_formData);
     Navigator.of(context).pop();
-    print(newProduct.id);
-    print(newProduct.name);
-    print(newProduct.description);
-    print(newProduct.imageUrl);
   }
 
   @override
