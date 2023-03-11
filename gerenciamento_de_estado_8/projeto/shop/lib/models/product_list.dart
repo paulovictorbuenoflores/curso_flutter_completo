@@ -16,15 +16,28 @@ class ProductList with ChangeNotifier {
     return _items.length;
   }
 
-  void addProductFromData(Map<String, Object> data) {
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
+  void saveProduct(Map<String, Object> data) {
+    bool hasId = data['id'] != null;
+    final product = Product(
+      id: hasId ? data['id'] as String : Random().nextDouble().toString(),
       name: data['name'] as String,
       description: data['description'] as String,
       price: data['price'] as double,
       imageUrl: data['imageUrl'] as String,
     );
-    addProduct(newProduct);
+    if (hasId) {
+      updateProduct(product);
+    } else {
+      addProduct(product);
+    }
+  }
+
+  void updateProduct(Product product) {
+    int index = _items.indexWhere((p) => p.id == product.id);
+    if (index >= 0) {
+      _items[index] = product;
+      notifyListeners();
+    }
   }
 
   void addProduct(Product product) {
@@ -32,35 +45,3 @@ class ProductList with ChangeNotifier {
     notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
   }
 }
-/**
- * Estamos usando o mixin para implementar o ChangeNotifier, o objetivo é notificar os interessados 
- * na lista de produtos, toda vez que alguma coisa nela mudar, para notificar os interessados atraves do changeNotifier usamos 
- * o metodo notifyListeners(), no metodo que é alterado quando alguma coisa acontece, no nosso caso é o metodo de adicionar um novo produto na lista. 
- */
-
-
-/**
- * 
- *  bool _showFavoriteOnly = false;
-  List<Product> get items {
-    if (_showFavoriteOnly) {
-      return _items.where((prod) => prod.isFavorite).toList();
-    }
-    return [..._items];
-  }
-
-  void addProduct(Product product) {
-    _items.add(product);
-    notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
-  }
-
-  void showFavoriteOnly() {
-    _showFavoriteOnly = true;
-    notifyListeners();
-  }
-
-  void showAll() {
-    _showFavoriteOnly = false;
-    notifyListeners();
-  }
- * **/
