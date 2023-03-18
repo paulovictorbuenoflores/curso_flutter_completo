@@ -53,7 +53,8 @@ class ProductList with ChangeNotifier {
   }
 
   void addProduct(Product product) {
-    http.post(
+    http
+        .post(
       Uri.parse('$_baseUrl/products.json'),
       body: jsonEncode(
         {
@@ -64,8 +65,12 @@ class ProductList with ChangeNotifier {
           "isFavorite": product.isFavorite,
         },
       ),
-    );
-    _items.add(product);
-    notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
+    )
+        .then((resposta) {
+      //resposta da requisicao do http, o metodo retorna o futuro que é recebido aqui no .then
+//se eu quiser execultar algum codigo, apos salvar os dados, é nesse metodo
+      _items.add(product);
+      notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
+    });
   }
 }
