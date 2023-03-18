@@ -53,8 +53,7 @@ class ProductList with ChangeNotifier {
   }
 
   void addProduct(Product product) {
-    http
-        .post(
+    final future = http.post(
       Uri.parse('$_baseUrl/products.json'),
       body: jsonEncode(
         {
@@ -65,8 +64,9 @@ class ProductList with ChangeNotifier {
           "isFavorite": product.isFavorite,
         },
       ),
-    )
-        .then((resposta) {
+    );
+
+    future.then((resposta) {
       //resposta da requisicao do http, o metodo retorna o futuro que é recebido aqui no .then
 //se eu quiser execultar algum codigo, apos salvar os dados, é nesse metodo
       _items.add(product);
