@@ -65,10 +65,10 @@ class ProductList with ChangeNotifier {
         },
       ),
     );
-
-    future.then((resposta) {
-      //resposta da requisicao do http, o metodo retorna o futuro que é recebido aqui no .then
+    //resposta da requisicao do http, o metodo retorna o futuro que é recebido aqui no .then
 //se eu quiser execultar algum codigo, apos salvar os dados, é nesse metodo
+    future.then((resposta) {
+      print(resposta.body); //para ver oq veio no corpo da resposta
       _items.add(product);
       notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
     });
