@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -20,7 +21,7 @@ class ProductList with ChangeNotifier {
     return _items.length;
   }
 
-  void saveProduct(Map<String, Object> data) {
+  Future<void> saveProduct(Map<String, Object> data) {
     bool hasId = data['id'] != null;
     final product = Product(
       id: hasId ? data['id'] as String : Random().nextDouble().toString(),
@@ -30,18 +31,19 @@ class ProductList with ChangeNotifier {
       imageUrl: data['imageUrl'] as String,
     );
     if (hasId) {
-      updateProduct(product);
+      return updateProduct(product);
     } else {
-      addProduct(product);
+      return addProduct(product);
     }
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) {
     int index = _items.indexWhere((p) => p.id == product.id);
     if (index >= 0) {
       _items[index] = product;
       notifyListeners();
     }
+    return Future.value();
   }
 
   void removeProduct(Product product) {
@@ -52,7 +54,7 @@ class ProductList with ChangeNotifier {
     }
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     final future = http.post(
       Uri.parse('$_baseUrl/products.json'),
       body: jsonEncode(
@@ -67,8 +69,8 @@ class ProductList with ChangeNotifier {
     );
     //resposta da requisicao do http, o metodo retorna o futuro que é recebido aqui no .then
 //se eu quiser execultar algum codigo, apos salvar os dados, é nesse metodo
-    future.then((resposta) {
-      print(resposta.body); //para ver oq veio no corpo da resposta
+    return future.then<void>((resposta) {
+      //   print(resposta.body); //para ver oq veio no corpo da resposta
       final id = jsonDecode(resposta.body)['name'];
       _items.add(Product(
           id: id,
