@@ -69,7 +69,13 @@ class ProductList with ChangeNotifier {
 //se eu quiser execultar algum codigo, apos salvar os dados, é nesse metodo
     future.then((resposta) {
       print(resposta.body); //para ver oq veio no corpo da resposta
-      _items.add(product);
+      final id = jsonDecode(resposta.body)['name'];
+      _items.add(Product(
+          id: id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl));
       notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
     });
   }
