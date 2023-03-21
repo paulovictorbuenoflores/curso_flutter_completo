@@ -54,8 +54,8 @@ class ProductList with ChangeNotifier {
     }
   }
 
-  Future<void> addProduct(Product product) {
-    final future = http.post(
+  Future<void> addProduct(Product product) async {
+    final response = await http.post(
       Uri.parse('$_baseUrl/products.json'),
       body: jsonEncode(
         {
@@ -67,18 +67,13 @@ class ProductList with ChangeNotifier {
         },
       ),
     );
-    //resposta da requisicao do http, o metodo retorna o futuro que é recebido aqui no .then
-//se eu quiser execultar algum codigo, apos salvar os dados, é nesse metodo
-    return future.then<void>((resposta) {
-      //   print(resposta.body); //para ver oq veio no corpo da resposta
-      final id = jsonDecode(resposta.body)['name'];
-      _items.add(Product(
-          id: id,
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl));
-      notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
-    });
+    final id = jsonDecode(response.body)['name'];
+    _items.add(Product(
+        id: id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl));
+    notifyListeners();
   }
 }
