@@ -79,9 +79,6 @@ class ProductList with ChangeNotifier {
           price: product.price,
           imageUrl: product.imageUrl));
       notifyListeners(); //notifica as interessados de forma reativa, ou seja, reativa a insercao de um novo produto na lista.
-    }).catchError((error) {
-      print(error.toString());
-      throw error;
     });
   }
 }
