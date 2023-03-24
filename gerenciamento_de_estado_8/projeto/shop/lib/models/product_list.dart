@@ -5,10 +5,12 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/data/dummy_data.dart';
+import 'package:shop/exception/http_exception.dart';
 import 'package:shop/models/product.dart';
+import 'package:shop/utils/constants.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl = 'https://shop-cod3r-1a4a8-default-rtdb.firebaseio.com';
+  //final _baseUrl = 'https://shop-cod3r-1a4a8-default-rtdb.firebaseio.com';
 
   List<Product> _items = [];
 
@@ -23,7 +25,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> loadProduct() async {
     _items.clear();
-    Uri uri = Uri.parse('$_baseUrl/products.json');
+    Uri uri = Uri.parse('${Constants.PRODUCT_BASE_URL}/products.json');
     final response = await http.get(uri); //o await fica esperando a resposta
 
     if (response.body == 'null') return;
@@ -60,7 +62,7 @@ class ProductList with ChangeNotifier {
     int index = _items.indexWhere((p) => p.id == product.id);
     if (index >= 0) {
       await http.patch(
-        Uri.parse('$_baseUrl/products/${product.id}.json'),
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/products/${product.id}.json'),
         body: jsonEncode(
           {
             "name": product.name,
@@ -79,16 +81,28 @@ class ProductList with ChangeNotifier {
   Future<void> removeProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
     if (index >= 0) {
-      await http.delete(Uri.parse('$_baseUrl/products/${product.id}.json'));
-      _items.removeWhere((p) => p.id == product.id);
-
+      final product = _items[index];
+      _items.remove(product);
       notifyListeners();
+
+      final response = await http.delete(Uri.parse(
+          '${Constants.PRODUCT_BASE_URL}/products/${product.id}.json'));
+      //error da familia dos 400 é erro do lado do cliente, e erro da familia dos 500 é do lado do servidor
+      if (response.statusCode >= 400) {
+        //reinsirir o produto excluido se ocorre o error
+        _items.insert(index, product);
+        notifyListeners();
+        throw HttpException(
+          msg: 'Não foi possível excluir o produto',
+          statusCode: response.statusCode,
+        );
+      }
     }
   }
 
   Future<void> addProduct(Product product) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/products.json'),
+      Uri.parse('${Constants.PRODUCT_BASE_URL}/products.json'),
       body: jsonEncode(
         {
           "name": product.name,
