@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop/exception/auth_exception.dart';
 
 class Auth with ChangeNotifier {
   //static const _url ='https://identitytoolkit.googleapis.com/v1/accounts: signUp             ?key=AIzaSyCUe2zMH0ccoNSrIhIkgIwxhymFqeEv4pY';
@@ -21,16 +22,21 @@ class Auth with ChangeNotifier {
         },
       ),
     );
-    print(jsonDecode(response.body));
+    final body = jsonDecode(response.body);
+
+    if (body['error'] != null) {
+      throw AuthException(body['error']['message']);
+    }
+    print(body);
   }
 
   Future<void> signup(String email, String password) async {
-    _authenticate(email, password, 'signUp');
+    return _authenticate(email, password, 'signUp');
     print('cadastro signup');
   }
 
   Future<void> login(String email, String password) async {
-    _authenticate(email, password, 'signInWithPassword');
+    return _authenticate(email, password, 'signInWithPassword');
     print('login');
   }
 }
