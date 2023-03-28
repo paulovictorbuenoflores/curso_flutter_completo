@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:ffi';
+
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:shop/data/dummy_data.dart';
+
 import 'package:shop/exception/http_exception.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/utils/constants.dart';

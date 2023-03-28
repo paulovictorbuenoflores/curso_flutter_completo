@@ -24,6 +24,10 @@ class OrderPage extends StatelessWidget {
             return Center(
               child: CircularProgressIndicator(),
             );
+          } else if (snapshot.error != null) {
+            return Center(
+              child: Text('Ocorreu um erro!'),
+            );
           } else {
             return Consumer<OrderPedidoList>(
               builder: (ctx, orders, child) => ListView.builder(
