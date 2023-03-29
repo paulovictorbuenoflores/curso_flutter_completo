@@ -11,8 +11,10 @@ import 'package:shop/utils/constants.dart';
 
 class ProductList with ChangeNotifier {
   //final _baseUrl = 'https://shop-cod3r-1a4a8-default-rtdb.firebaseio.com';
-
+  String _token;
   List<Product> _items = [];
+  ProductList(this._token, this._items);
+//é necessario passar a dependencia do token, e também os items para não perder quando fizer o update no provider
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
@@ -25,19 +27,21 @@ class ProductList with ChangeNotifier {
 
   Future<void> loadProduct() async {
     _items.clear();
-    Uri uri = Uri.parse('${Constants.PRODUCT_BASE_URL}/products.json');
+    Uri uri =
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/products.json?auth=$_token');
     final response = await http.get(uri); //o await fica esperando a resposta
 
     if (response.body == 'null') return;
     Map<String, dynamic> data = jsonDecode(response.body);
     data.forEach((productId, productData) {
       _items.add(Product(
-          id: productId,
-          name: productData['name'],
-          description: productData['description'],
-          price: productData['price'],
-          imageUrl: productData['imageUrl'],
-          isFavorite: productData['isFavorite']));
+        id: productId,
+        name: productData['name'],
+        description: productData['description'],
+        price: double.parse(productData['price'].toString()),
+        imageUrl: productData['imageUrl'],
+        // isFavorite: productData['isFavorite']
+      ));
     });
     notifyListeners();
   }
@@ -62,7 +66,8 @@ class ProductList with ChangeNotifier {
     int index = _items.indexWhere((p) => p.id == product.id);
     if (index >= 0) {
       await http.patch(
-        Uri.parse('${Constants.PRODUCT_BASE_URL}/products/${product.id}.json'),
+        Uri.parse(
+            '${Constants.PRODUCT_BASE_URL}/products/${product.id}.json?auth=$_token'),
         body: jsonEncode(
           {
             "name": product.name,
@@ -86,7 +91,7 @@ class ProductList with ChangeNotifier {
       notifyListeners();
 
       final response = await http.delete(Uri.parse(
-          '${Constants.PRODUCT_BASE_URL}/products/${product.id}.json'));
+          '${Constants.PRODUCT_BASE_URL}/products/${product.id}.json?auth=$_token'));
       //error da familia dos 400 é erro do lado do cliente, e erro da familia dos 500 é do lado do servidor
       if (response.statusCode >= 400) {
         //reinsirir o produto excluido se ocorre o error
@@ -102,14 +107,14 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final response = await http.post(
-      Uri.parse('${Constants.PRODUCT_BASE_URL}/products.json'),
+      Uri.parse('${Constants.PRODUCT_BASE_URL}/products.json?auth=$_token'),
       body: jsonEncode(
         {
           "name": product.name,
           "description": product.description,
           "price": product.price,
           "imageUrl": product.imageUrl,
-          "isFavorite": product.isFavorite,
+          // "isFavorite": product.isFavorite,
         },
       ),
     );

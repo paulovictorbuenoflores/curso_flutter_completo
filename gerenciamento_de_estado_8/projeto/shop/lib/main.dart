@@ -23,10 +23,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: ((context) => ProductList())),
-        ChangeNotifierProvider(create: ((context) => Cart())),
-        ChangeNotifierProvider(create: ((context) => OrderPedidoList())),
+        //O provider de productList depende do provider Auth(), ou seja , um provider depende do outro, preciso pegar o token do provider auth para enviar na requisicao do produtos do provider productList
+        //para resolver o problema acima, usaremos o proxyProvider, usamos o proxyProvider quando vamos depender de um unico provider,  se o seu provider precisar de mais de um provider sera necessario usar outro tipo de proxyProvider
+        // Como usar o ChangeNotifierProxyProvider ? é simples ChangeNotifierProxyProvider< NOME DO PROVIDER QUE PRECISO/DEPENDO, NOME DO PROVIDER QUE PRECISA>
         ChangeNotifierProvider(create: (((context) => Auth()))),
+        ChangeNotifierProxyProvider<Auth, ProductList>(
+          create: ((context) => ProductList('', [])),
+          update: (ctx, auth, previous) {
+            return ProductList(auth.token ?? '', previous?.items ?? []);
+          },
+        ),
+        ChangeNotifierProxyProvider<Auth, OrderPedidoList>(
+          create: ((context) => OrderPedidoList('', [])),
+          update: (ctx, auth, previous) {
+            return OrderPedidoList(auth.token ?? '', previous?.items ?? []);
+          },
+        ),
+        ChangeNotifierProvider(create: ((context) => Cart())),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/models/auth.dart';
 import 'package:shop/models/cart.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/pages/product_detail_page.dart';
@@ -14,7 +15,8 @@ class ProductGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
-    final cart = Provider.of<Cart>(context);
+    final cart = Provider.of<Cart>(context, listen: false);
+    final auth = Provider.of<Auth>(context, listen: false);
 //usando o consumer de forma especifica, apenas onde o estado esta mudando, no caso nosso é no favorit.
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -36,7 +38,8 @@ class ProductGridItem extends StatelessWidget {
             //o terceiro parametro, child é o componente que nunca muda
             builder: (ctx, product, _) => IconButton(
               onPressed: () {
-                product.alternanciaFavorito();
+                product.alternanciaFavorito(
+                    auth.token ?? '', auth.userId ?? '');
               },
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
