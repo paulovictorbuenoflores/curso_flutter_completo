@@ -1,62 +1,67 @@
 import 'dart:convert';
-
 import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:shop/exception/http_exception.dart';
+import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/utils/constants.dart';
 
 class ProductList with ChangeNotifier {
-  //final _baseUrl = 'https://shop-cod3r-1a4a8-default-rtdb.firebaseio.com';
-  String _token;
-  String _userId;
+  final String _token;
+  final String _userId;
   List<Product> _items = [];
-  ProductList([this._token = '', this._userId = '', this._items = const []]);
-//é necessario passar a dependencia do token, e também os items para não perder quando fizer o update no provider
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
       _items.where((prod) => prod.isFavorite).toList();
 
+  ProductList([
+    this._token = '',
+    this._userId = '',
+    this._items = const [],
+  ]);
+
   int get itemsCount {
-    // notifyListeners();
     return _items.length;
   }
 
-  Future<void> loadProduct() async {
+  Future<void> loadProducts() async {
     _items.clear();
-    Uri uri = Uri.parse('${Constants.PRODUCT_BASE_URL}.json?auth=$_token');
-    final response = await http.get(uri); //o await fica esperando a resposta
 
+    final response = await http.get(
+      Uri.parse('${Constants.productBaseUrl}.json?auth=$_token'),
+    );
     if (response.body == 'null') return;
 
     final favResponse = await http.get(
-      Uri.parse('${Constants.USER_FAVORITES_URL}/$_userId.json?auth=$_token'),
+      Uri.parse(
+        '${Constants.userFavoritesUrl}/$_userId.json?auth=$_token',
+      ),
     );
+
     Map<String, dynamic> favData =
         favResponse.body == 'null' ? {} : jsonDecode(favResponse.body);
-   
-   
+
     Map<String, dynamic> data = jsonDecode(response.body);
     data.forEach((productId, productData) {
       final isFavorite = favData[productId] ?? false;
-      _items.add(Product(
-        id: productId,
-        name: productData['name'],
-        description: productData['description'],
-        price: double.parse(productData['price'].toString()),
-        imageUrl: productData['imageUrl'],
-        isFavorite: isFavorite,
-      ));
+      _items.add(
+        Product(
+          id: productId,
+          name: productData['name'],
+          description: productData['description'],
+          price: productData['price'],
+          imageUrl: productData['imageUrl'],
+          isFavorite: isFavorite,
+        ),
+      );
     });
     notifyListeners();
   }
 
   Future<void> saveProduct(Map<String, Object> data) {
     bool hasId = data['id'] != null;
+
     final product = Product(
       id: hasId ? data['id'] as String : Random().nextDouble().toString(),
       name: data['name'] as String,
@@ -64,6 +69,7 @@ class ProductList with ChangeNotifier {
       price: data['price'] as double,
       imageUrl: data['imageUrl'] as String,
     );
+
     if (hasId) {
       return updateProduct(product);
     } else {
@@ -71,12 +77,37 @@ class ProductList with ChangeNotifier {
     }
   }
 
+  Future<void> addProduct(Product product) async {
+    final response = await http.post(
+      Uri.parse('${Constants.productBaseUrl}.json?auth=$_token'),
+      body: jsonEncode(
+        {
+          "name": product.name,
+          "description": product.description,
+          "price": product.price,
+          "imageUrl": product.imageUrl,
+        },
+      ),
+    );
+
+    final id = jsonDecode(response.body)['name'];
+    _items.add(Product(
+      id: id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    ));
+    notifyListeners();
+  }
+
   Future<void> updateProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
+
     if (index >= 0) {
       await http.patch(
         Uri.parse(
-            '${Constants.PRODUCT_BASE_URL}/${product.id}.json?auth=$_token'),
+            '${Constants.productBaseUrl}/${product.id}.json?auth=$_token'),
         body: jsonEncode(
           {
             "name": product.name,
@@ -86,54 +117,52 @@ class ProductList with ChangeNotifier {
           },
         ),
       );
+
       _items[index] = product;
       notifyListeners();
     }
-    //  return Future.value();
   }
 
   Future<void> removeProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
+
     if (index >= 0) {
       final product = _items[index];
       _items.remove(product);
       notifyListeners();
 
-      final response = await http.delete(Uri.parse(
-          '${Constants.PRODUCT_BASE_URL}/${product.id}.json?auth=$_token'));
-      //error da familia dos 400 é erro do lado do cliente, e erro da familia dos 500 é do lado do servidor
+      final response = await http.delete(
+        Uri.parse(
+            '${Constants.productBaseUrl}/${product.id}.json?auth=$_token'),
+      );
+
       if (response.statusCode >= 400) {
-        //reinsirir o produto excluido se ocorre o error
         _items.insert(index, product);
         notifyListeners();
         throw HttpException(
-          msg: 'Não foi possível excluir o produto',
+          msg: 'Não foi possível excluir o produto.',
           statusCode: response.statusCode,
         );
       }
     }
   }
-
-  Future<void> addProduct(Product product) async {
-    final response = await http.post(
-      Uri.parse('${Constants.PRODUCT_BASE_URL}.json?auth=$_token'),
-      body: jsonEncode(
-        {
-          "name": product.name,
-          "description": product.description,
-          "price": product.price,
-          "imageUrl": product.imageUrl,
-          // "isFavorite": product.isFavorite,
-        },
-      ),
-    );
-    final id = jsonDecode(response.body)['name'];
-    _items.add(Product(
-        id: id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl));
-    notifyListeners();
-  }
 }
+
+// bool _showFavoriteOnly = false;
+
+//   List<Product> get items {
+//     if (_showFavoriteOnly) {
+//       return _items.where((prod) => prod.isFavorite).toList();
+//     }
+//     return [..._items];
+//   }
+
+//   void showFavoriteOnly() {
+//     _showFavoriteOnly = true;
+//     notifyListeners();
+//   }
+
+//   void showAll() {
+//     _showFavoriteOnly = false;
+//     notifyListeners();
+//   }

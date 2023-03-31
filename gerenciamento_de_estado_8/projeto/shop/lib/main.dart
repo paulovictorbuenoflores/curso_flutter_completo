@@ -28,15 +28,17 @@ class MyApp extends StatelessWidget {
         // Como usar o ChangeNotifierProxyProvider ? é simples ChangeNotifierProxyProvider< NOME DO PROVIDER QUE PRECISO/DEPENDO, NOME DO PROVIDER QUE PRECISA>
         ChangeNotifierProvider(create: (((context) => Auth()))),
         ChangeNotifierProxyProvider<Auth, ProductList>(
-          create: ((context) => ProductList('', [])),
+          create: ((context) => ProductList()),
           update: (ctx, auth, previous) {
-            return ProductList(auth.token ?? '', previous?.items ?? []);
+            return ProductList(
+                auth.token ?? '', auth.userId ?? '', previous?.items ?? []);
           },
         ),
         ChangeNotifierProxyProvider<Auth, OrderPedidoList>(
-          create: ((context) => OrderPedidoList('', [])),
+          create: ((context) => OrderPedidoList()),
           update: (ctx, auth, previous) {
-            return OrderPedidoList(auth.token ?? '', previous?.items ?? []);
+            return OrderPedidoList(
+                auth.token ?? '', auth.userId ?? '', previous?.items ?? []);
           },
         ),
         ChangeNotifierProvider(create: ((context) => Cart())),
