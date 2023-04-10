@@ -16,27 +16,33 @@ class _OrderPedidoWidgetState extends State<OrderPedidoWidget> {
   bool _expand = false;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          ListTile(
-            title: Text('R\$ ${widget.orderPedido.total.toStringAsFixed(2)}'),
-            //no pubspec.yaml temos importacao do intl, que é responsavel pela formatacao da data
-            subtitle: Text(
-                DateFormat('dd/MM/yyyy hh:mm').format(widget.orderPedido.date)),
-            trailing: IconButton(
-              icon: _expand ? Icon(Icons.expand_less) : Icon(Icons.expand_more),
-              onPressed: () {
-                setState(() {
-                  _expand = !_expand;
-                });
-              },
+    final itemsHeight = (widget.orderPedido.products.length * 24.0) + 10;
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height: _expand ? itemsHeight + 80 : 80,
+      child: Card(
+        child: Column(
+          children: [
+            ListTile(
+              title: Text('R\$ ${widget.orderPedido.total.toStringAsFixed(2)}'),
+              //no pubspec.yaml temos importacao do intl, que é responsavel pela formatacao da data
+              subtitle: Text(DateFormat('dd/MM/yyyy hh:mm')
+                  .format(widget.orderPedido.date)),
+              trailing: IconButton(
+                icon:
+                    _expand ? Icon(Icons.expand_less) : Icon(Icons.expand_more),
+                onPressed: () {
+                  setState(() {
+                    _expand = !_expand;
+                  });
+                },
+              ),
             ),
-          ),
-          if (_expand)
-            Container(
+            // if (_expand)
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              height: _expand ? itemsHeight : 0,
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              height: (widget.orderPedido.products.length * 25.0) + 10,
               child: ListView(
                 children: widget.orderPedido.products.map((product) {
                   return Row(
@@ -58,7 +64,8 @@ class _OrderPedidoWidgetState extends State<OrderPedidoWidget> {
                 }).toList(),
               ),
             )
-        ],
+          ],
+        ),
       ),
     );
   }

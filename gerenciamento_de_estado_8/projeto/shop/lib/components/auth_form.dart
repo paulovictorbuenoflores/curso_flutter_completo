@@ -26,8 +26,8 @@ class _AuthFormState extends State<AuthForm>
   };
 
   AnimationController? _controller;
-  Animation<Size>? _heightAnimation;
-
+  Animation<double>? _opacityAnimation;
+  Animation<Offset>? _sliderAnimation;
   @override
   void initState() {
     // TODO: implement initState
@@ -39,14 +39,19 @@ class _AuthFormState extends State<AuthForm>
         milliseconds: 300,
       ),
     ); //vsync é um tickerProvider, ou seja, tickerProvider é uma classe que vai prover o ticker, ticker é uma classe dentro do flutter que ela vai disparar uma callback para cada frame da animacao
-    _heightAnimation = Tween(
-      begin: Size(double.infinity, 310),
-      end: Size(double.infinity, 410),
+    _opacityAnimation = Tween(
+      begin: 0.0,
+      end: 1.0,
     ).animate(CurvedAnimation(
         parent: _controller!,
         curve: Curves
             .linear)); //tween quer dizer que vc quer fazer a animacao entre um ponto A e um ponto B
     // _heightAnimation?.addListener(() => setState(() {}));
+
+    _sliderAnimation = Tween<Offset>(
+      begin: Offset(0, -1.5),
+      end: Offset(0, 0),
+    ).animate(CurvedAnimation(parent: _controller!, curve: Curves.linear));
   }
 
   @override
@@ -118,15 +123,13 @@ class _AuthFormState extends State<AuthForm>
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: AnimatedBuilder(
-        animation: _heightAnimation!,
-        builder: (context, childForm) => Container(
-          padding: EdgeInsets.all(16),
-          // height: _isLogin() ? 310 : 400,
-          height: _heightAnimation?.value.height ?? (_isLogin() ? 310 : 400),
-          width: deviceSize.width * 0.75,
-          child: childForm,
-        ),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.linear,
+        padding: EdgeInsets.all(16),
+        height: _isLogin() ? 310 : 400,
+        //height: _heightAnimation?.value.height ?? (_isLogin() ? 310 : 400),
+        width: deviceSize.width * 0.75,
         child: Form(
           key: _formKey,
           child: Column(
@@ -157,22 +160,36 @@ class _AuthFormState extends State<AuthForm>
                   return null;
                 },
               ),
-              if (_isSignup())
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Confirmar Senha'),
-                  keyboardType: TextInputType.emailAddress,
-                  obscureText: true,
-                  validator: _isLogin()
-                      ? null
-                      : (_password) {
-                          final password = _password ?? '';
-
-                          if (password != _passwordController.text) {
-                            return 'Senhas informadas não conferem.';
-                          }
-                          return null;
-                        },
+              //if (_isSignup())
+              AnimatedContainer(
+                constraints: BoxConstraints(
+                  minHeight: _isLogin() ? 0 : 60,
+                  maxHeight: _isLogin() ? 0 : 120,
                 ),
+                duration: Duration(milliseconds: 300),
+                curve: Curves.linear,
+                child: FadeTransition(
+                  opacity: _opacityAnimation!,
+                  child: SlideTransition(
+                    position: _sliderAnimation!,
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: 'Confirmar Senha'),
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: true,
+                      validator: _isLogin()
+                          ? null
+                          : (_password) {
+                              final password = _password ?? '';
+
+                              if (password != _passwordController.text) {
+                                return 'Senhas informadas não conferem.';
+                              }
+                              return null;
+                            },
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(height: 20),
               if (_isLoading)
                 CircularProgressIndicator()
