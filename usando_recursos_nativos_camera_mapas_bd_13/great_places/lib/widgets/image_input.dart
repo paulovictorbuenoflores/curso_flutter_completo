@@ -25,7 +25,13 @@ class _ImageInputState extends State<ImageInput> {
     setState(() {
       _storedImage = File(imageFile.path);
     });
-    //widget.onSelectImage();
+
+    // 1 passo pegar o diretorio
+    // 2 pegar o nome da imagem
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+    String fileName = path.basename(_storedImage!.path);
+    final savedImage = await _storedImage!.copy('${appDir.path}/${fileName}');
+    widget.onSelectImage(savedImage);
   }
 
   @override
